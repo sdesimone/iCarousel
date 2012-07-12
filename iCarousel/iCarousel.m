@@ -1640,10 +1640,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     [CATransaction setDisableActions:YES];
     NSTimeInterval currentTime = CACurrentMediaTime();
     
-    NSLog(@"STEP");
     if (toggle != 0.0f)
     {
-        NSLog(@"TOGGLE != 0: %f", toggle);
         CGFloat toggleDuration = fminf(1.0f, fmaxf(0.0f, itemWidth / fabsf(startVelocity)));
         toggleDuration = MIN_TOGGLE_DURATION + (MAX_TOGGLE_DURATION - MIN_TOGGLE_DURATION) * toggleDuration;
         NSTimeInterval time = fminf(1.0f, (currentTime - toggleTime) / toggleDuration);
@@ -1654,7 +1652,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     
     if (scrolling)
     {
-        NSLog(@"SCROLL != 0: %f", toggle);
         NSTimeInterval time = fminf(1.0f, (currentTime - startTime) / scrollDuration);
         CGFloat delta = [self easeInOut:time];
         scrollOffset = startOffset + (endOffset - startOffset) * delta;
@@ -1671,7 +1668,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     else if (decelerating)
     {
-        NSLog(@"DECEL != 0: %f", toggle);
         CGFloat time = fminf(scrollDuration, currentTime - startTime);
         CGFloat acceleration = -startVelocity/scrollDuration;
         CGFloat distance = startVelocity * time + 0.5f * acceleration * powf(time, 2.0f);
@@ -1712,11 +1708,14 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
                 toggleTime = currentTime - MAX_TOGGLE_DURATION * fabsf(difference);
                 toggle = fmaxf(-1.0f, fminf(1.0f, -difference));
             }
+
+            //-- SDS: stopping timer when deceleration ends (otherwise it will fires forever)
+            [self stopAnimation];
+
         }
     }
     else if (toggle == 0.0f)
     {
-        NSLog(@"TOGGLE == 0: %f", toggle);
         [self stopAnimation];
     }
     
