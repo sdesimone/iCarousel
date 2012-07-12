@@ -45,6 +45,19 @@
 //  https://gist.github.com/1563325
 //
 
+
+#ifdef CAROUSEL_XCODE_3
+//-- SDS: defined this to make it compilable with xcode 3
+//-- SDS: this must be removed from final version!!!!
+//-- SDS: compilation with Xcode 4!!!!!
+#define strong retain
+#define unsafe_unretained assign
+#define __bridge
+//-- SDS: defined this to make it compilable with xcode 3
+//-- SDS: this must be removed from final version!!!!
+//-- SDS: compilation with Xcode 4!!!!!
+#endif
+
 #ifndef AH_RETAIN
 #if __has_feature(objc_arc)
 #define AH_RETAIN(x) x

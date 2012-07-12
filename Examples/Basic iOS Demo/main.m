@@ -10,9 +10,8 @@
 
 int main(int argc, char *argv[])
 {
-    @autoreleasepool
-    {
+	NSAutoreleasePool *pool = [NSAutoreleasePool new];
     	int retVal = UIApplicationMain(argc, argv, nil, nil);
+	[pool release];
     	return retVal;
-    }
 }

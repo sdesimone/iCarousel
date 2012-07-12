@@ -210,6 +210,19 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 #endif
 
+#ifdef ICAROUSEL_IOS
+
+- (id)initWithFrame:(CGRect)frame
+{
+	if ((self = [super initWithFrame:frame]))
+    {
+		[self setUp];
+	}
+	return self;
+}
+
+#else
+
 - (id)initWithFrame:(NSRect)frame
 {
 	if ((self = [super initWithFrame:frame]))
@@ -218,6 +231,8 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	}
 	return self;
 }
+
+#endif
 
 - (void)dealloc
 {	
@@ -439,6 +454,12 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		}
         default:
         {
+            //-- SDS: added this!!!
+			if ([delegate respondsToSelector:@selector(carousel:itemAlphaForOffset:)])
+			{
+				return [delegate carousel:self itemAlphaForOffset:offset];
+			}
+			
             return 1.0f;
         }
     }
@@ -814,6 +835,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     [self layOutItemViews];
 }
 
+#ifndef ICAROUSEL_IOS
+
 //for Mac OS
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize
 {
@@ -821,6 +844,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     [self layoutSubviews];
 	[CATransaction setDisableActions:NO];
 }
+#endif
+
 
 - (void)transformItemViews
 {
@@ -1486,13 +1511,15 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     {
         if (useDisplayLink)
         {
-            
+
 #ifdef ICAROUSEL_IOS
 #ifndef USING_CHAMELEON
+#ifndef CAROUSEL_USING_NSTIMERS
             
 			//support for Chameleon
             timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(step)];
             [timer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+#endif
 #endif
 #else
             CVDisplayLinkCreateWithActiveCGDisplays((void *)&timer); 
@@ -1513,14 +1540,19 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             
             [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
         }
+        
+        NSLog(@"STARTED TIMER %@", [timer description]);
+
     }
 }
 
 - (void)stopAnimation
 {
+    NSLog(@"STOPPING TIMER");
     
 #ifdef ICAROUSEL_IOS
     
+    NSLog(@"INVALIDATING TIMER %@", [timer description]);
     [timer invalidate];
     
 #else
@@ -1608,8 +1640,10 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     [CATransaction setDisableActions:YES];
     NSTimeInterval currentTime = CACurrentMediaTime();
     
+    NSLog(@"STEP");
     if (toggle != 0.0f)
     {
+        NSLog(@"TOGGLE != 0: %f", toggle);
         CGFloat toggleDuration = fminf(1.0f, fmaxf(0.0f, itemWidth / fabsf(startVelocity)));
         toggleDuration = MIN_TOGGLE_DURATION + (MAX_TOGGLE_DURATION - MIN_TOGGLE_DURATION) * toggleDuration;
         NSTimeInterval time = fminf(1.0f, (currentTime - toggleTime) / toggleDuration);
@@ -1620,6 +1654,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     
     if (scrolling)
     {
+        NSLog(@"SCROLL != 0: %f", toggle);
         NSTimeInterval time = fminf(1.0f, (currentTime - startTime) / scrollDuration);
         CGFloat delta = [self easeInOut:time];
         scrollOffset = startOffset + (endOffset - startOffset) * delta;
@@ -1636,6 +1671,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     else if (decelerating)
     {
+        NSLog(@"DECEL != 0: %f", toggle);
         CGFloat time = fminf(scrollDuration, currentTime - startTime);
         CGFloat acceleration = -startVelocity/scrollDuration;
         CGFloat distance = startVelocity * time + 0.5f * acceleration * powf(time, 2.0f);
@@ -1680,6 +1716,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     else if (toggle == 0.0f)
     {
+        NSLog(@"TOGGLE == 0: %f", toggle);
         [self stopAnimation];
     }
     

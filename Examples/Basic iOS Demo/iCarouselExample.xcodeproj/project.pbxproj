@@ -29,7 +29,6 @@
 		0148358313A36C2000E687AC /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
 		0148358413A36C2000E687AC /* iCarouselExample-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iCarouselExample-Info.plist"; sourceTree = SOURCE_ROOT; };
 		0148358513A36C2000E687AC /* iCarouselExample-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "iCarouselExample-Prefix.pch"; sourceTree = SOURCE_ROOT; };
-		0148358713A36C2000E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
 		0148358B13A36C3700E687AC /* iCarouselExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarouselExampleViewController.m; sourceTree = SOURCE_ROOT; };
 		0148358C13A36C3700E687AC /* iCarouselExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarouselExampleViewController.h; sourceTree = SOURCE_ROOT; };
 		0148358D13A36C3700E687AC /* iCarouselExampleAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarouselExampleAppDelegate.m; sourceTree = SOURCE_ROOT; };
@@ -108,7 +107,6 @@
 				0148358313A36C2000E687AC /* main.m */,
 				0148358413A36C2000E687AC /* iCarouselExample-Info.plist */,
 				0148358513A36C2000E687AC /* iCarouselExample-Prefix.pch */,
-				0148358613A36C2000E687AC /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -130,6 +128,7 @@
 				B2E5E72C1461544B00EADB7A /* page.png */,
 			);
 			name = Resources;
+			path = ../../Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -206,20 +205,13 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		0148358613A36C2000E687AC /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0148358713A36C2000E687AC /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		0148358F13A36C3700E687AC /* MainWindow.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				0148359013A36C3700E687AC /* en */,
 			);
 			name = MainWindow.xib;
+			path = ../en.lproj;
 			sourceTree = "<group>";
 		};
 		0148359113A36C3700E687AC /* iCarouselExampleViewController.xib */ = {
@@ -228,6 +220,7 @@
 				0148359213A36C3700E687AC /* en */,
 			);
 			name = iCarouselExampleViewController.xib;
+			path = ../en.lproj;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
